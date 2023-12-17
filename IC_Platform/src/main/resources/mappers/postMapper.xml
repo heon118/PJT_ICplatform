@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shsh.ic.model.dao.PostDao">
+	<insert id="insertPost" parameterType="Posts">
+		INSERT INTO
+		Posts(players_id, post_name, post_path,file_size)
+		values (#{playerId}, #{postName}, #{postPath}, #{fileSize})
+	</insert>
+
+	<select id="selectPosts" parameterType="int">
+		SELECT post_id as postId, players_id as playerId, post_name as postName, post_path as postPath, file_size as fileSize, upload_date as uploadDate
+		FROM posts
+		WHERE players_id=#{playerId}
+		ORDER BY uploadDate desc
+	</select>
+	
+	<delete id="deletePost" parameterType="int">
+		DELETE FROM posts
+		WHERE post_id=#{postId}
+	</delete>
+	
+	<select id="selectPostOne" parameterType="int">
+		SELECT post_id as postId, players_id as playerId, post_name as postName, post_path as postPath, file_size as fileSize, upload_date as uploadDate
+		FROM posts
+		WHERE post_id=#{postId}
+	</select>
+
+</mapper>

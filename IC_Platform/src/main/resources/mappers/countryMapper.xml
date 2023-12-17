@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shsh.ic.model.dao.CountryDao">
+	<select id="selectCountries">
+	  	SELECT name, gold, silver, bronze, total_medal as totalMedal
+	  	FROM countries
+	  	ORDER BY gold DESC, silver DESC, bronze DESC, name ASC;
+  	</select>
+  
+	<update id="updateCountryGold" parameterType="String">
+		UPDATE countries
+		SET gold=gold+1, total_medal=total_medal+1
+		WHERE name=#{name}
+	</update>
+
+	<update id="updateCountrySilver" parameterType="String">
+		UPDATE countries
+		SET silver=silver+1, total_medal=total_medal+1
+		WHERE name=#{name}
+	</update>
+
+	<update id="updateCountryBronze" parameterType="String">
+		UPDATE countries
+		SET bronze=bronze+1, total_medal=total_medal+1
+		WHERE name=#{name}
+	</update>
+</mapper>

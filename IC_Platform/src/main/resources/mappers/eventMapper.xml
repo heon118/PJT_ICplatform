@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shsh.ic.model.dao.EventDao">
+	<select id="selectAllEvents">
+		SELECT distinct event_id as eventId, event_date as eventDate, content, result, expect, medal_chance as medalChance
+		FROM events
+		ORDER BY eventDate ASC
+	</select>
+
+	<select id="selectEventsOfWeek" parameterType="int">
+		SELECT distinct event_id as eventId, event_date as eventDate, content, result, expect, medal_chance as medalChance
+		FROM events
+		WHERE WEEK(event_date, 0)=#{week}
+		ORDER BY eventDate ASC
+	</select>
+
+	<select id="selectEventsOfDay" parameterType="int">
+		SELECT distinct event_id as eventId, event_date as eventDate, content, result, expect, medal_chance as medalChance
+		FROM events
+		WHERE month(event_date)=#{month} and day(event_date)=#{day}
+		ORDER BY eventDate ASC
+	</select>
+
+	<select id="selectEventsDetail" parameterType="int">
+		SELECT distinct event_id as eventId, event_date as eventDate, content, result, expect, medal_chance as medalChance
+		FROM events
+		WHERE event_id=#{eventId}
+	</select>
+
+	<select id="selectEventPlayer" parameterType="int" resultType="player">
+		SELECT id, name, gender, birth, sports, sports_detail as sportsDetail, gold, silver, bronze, intro, msg_cnt as msgCnt
+		FROM events, players
+		WHERE Players_id=id and event_id=#{eventId}
+	</select>
+
+	<insert id="insertEvent" parameterType="Event">
+		INSERT INTO
+		events(event_id, Players_id, event_date,content, result, medal_chance)
+		values (#{eventId}, #{playerId}, #{eventDate}, #{content}, #{result}, #{medalChance})
+	</insert>
+
+	<update id="updateEvent" parameterType="Event">
+		UPDATE events
+		SET event_date=#{eventDate}, content=#{content}, result=#{result}  
+		WHERE event_id=#{eventId}
+	</update>
+
+	<update id="updateEventExpect" parameterType="int">
+		UPDATE events
+		SET expect=expect+1
+		WHERE event_id=#{eventId}
+	</update>
+	
+	<delete id="deleteEvent" parameterType="int">
+		DELETE FROM events
+		WHERE event_id=#{eventId}
+	</delete>
+	
+	<select id="selectMainEvents" parameterType="int">
+		SELECT distinct event_id as eventId, event_date as eventDate, content, result, expect, medal_chance as medalChance
+		FROM events
+		WHERE month(event_date)=#{month} and day(event_date)=#{day}
+		ORDER BY expect DESC
+	</select>
+	
+	<select id="selectImportantEvents" parameterType="int">
+		SELECT distinct event_id as eventId, event_date as eventDate, content, result, expect, medal_chance as medalChance
+		FROM events
+		WHERE month(event_date)=#{month} and day(event_date)=#{day} AND medal_chance=1
+		ORDER BY eventDate ASC
+	</select>
+</mapper>
